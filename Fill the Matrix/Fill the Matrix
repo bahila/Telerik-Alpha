@@ -1,0 +1,190 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MultiDimensionalArrays
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int inputNum = int.Parse(Console.ReadLine());
+            string inputChar = Console.ReadLine();
+
+            int[,] array = new int[inputNum, inputNum];
+
+            switch (inputChar)
+            {
+                case "a": VerticalMatrix(array, inputNum); break;
+                case "b": HorizontalMatrix(array, inputNum); break;
+                case "c": DiagonalMatrix(array, inputNum); break;
+                case "d": SpiralMatrix(array, inputNum); break;
+                default: Console.WriteLine("Invalid input!"); break;
+            }
+            PrintMatrix(inputNum, array);
+
+        }
+        public static void VerticalMatrix(int[,] array, int num)
+        {
+
+            int counter = 1;
+            for (int cols = 0; cols < num; cols++)
+            {
+                for (int rows = 0; rows < num; rows++)
+                {
+                    array[rows, cols] = counter;
+
+                    counter++;
+                }
+            }
+        }
+
+        public static void HorizontalMatrix(int[,] array, int num)
+        {
+            int counter = 1;
+
+            for (int cols = 0; cols < num; cols++)
+            {
+                if (cols % 2 == 0)
+                {
+                    for (int rows = 0; rows < num; rows++)
+                    {
+                        array[rows, cols] = counter;
+                        counter++;
+                    }
+                }
+                else
+                {
+                    for (int rows = num - 1; rows >= 0; rows--)
+                    {
+                        array[rows, cols] = counter;
+                        counter++;
+                    }
+                }
+            }
+        }
+        public static void DiagonalMatrix(int[,] array, int num)
+        {
+            int counter = 1;
+            int rows = 0;
+            int cols = 0;
+            int currentElements = 1;
+
+            //first part very good
+            for (int diagonal = num - 1; diagonal > 0; diagonal--)
+            {
+                rows = diagonal;
+                cols = 0;
+                for (int elements = 0; elements < currentElements; elements++)
+                {
+                    array[rows, cols] = counter;
+                    counter++;
+                    rows++;
+                    cols++;
+                }
+                currentElements++;
+            }
+            //second part i no like
+            for (int diagonal = 0; diagonal < num; diagonal++)
+            {
+                rows = 0;
+                cols = diagonal;
+                for (int elements = 0; elements < currentElements; elements++)
+                {
+                    array[rows, cols] = counter;
+                    counter++;
+                    rows++;
+                    cols++;
+                }
+                currentElements--;
+            }
+        }
+
+        public static void SpiralMatrix(int[,] array, int num)
+        {
+            int counter = 1;            
+            int cols = 0;
+            int rows = 0;
+            string direction = "down";
+            for (int elements = 0; elements < (num * num); elements++)
+            {
+                
+                switch (direction)
+                {
+                    case "up":
+                        
+                        if ((rows < 0) || (array[rows, cols] != 0))
+                        {
+                            rows++;
+                            cols--;
+                            direction = "left";
+                        }                                               
+                        break;
+
+                    case "down":
+                        if ((rows > num - 1) || (array[rows, cols] != 0))
+                        {
+                            direction = "right";
+                            rows--;
+                            cols++;
+                        }                
+                        break;
+
+                    case "left":
+                        if ((cols < 0) || (array[rows, cols] != 0))
+                        {
+                            cols++;
+                            rows++;
+                            direction = "down";
+                        }                      
+                        break;
+
+                    case "right":
+                        
+                        if ((cols > num - 1) || (array[rows, cols] != 0))
+                        {
+                            rows--;
+                            cols--;
+                            direction = "up";
+                        }                        
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input!");
+                        break;
+                }
+
+                array[rows, cols] = counter;
+                counter++;
+                switch(direction)
+                {
+                    case "up": rows--; break;
+                    case "down": rows++; break;
+                    case "left": cols--; break;
+                    case "right": cols++; break;
+                }
+            }
+        }
+
+        public static void PrintMatrix(int num, int[,] array)
+        {
+            for (int rows = 0; rows < num; rows++)
+            {
+                for (int cols = 0; cols < num; cols++)
+                {
+                    if (cols == num - 1)
+                    {
+                        Console.Write("{0}", array[rows, cols]);
+                    }
+                    else
+                    {
+                        Console.Write("{0} ", array[rows, cols]);
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
